@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Budget AR View</title>
+    <script src="https://aframe.io/releases/1.2.0/aframe.min.js"></script>
+    <script src="https://cdn.rawgit.com/jeromeetienne/AR.js/1.7.2/aframe/build/aframe-ar.min.js"></script>
+</head>
+<body style="margin: 0; overflow: hidden;">
+    <a-scene embedded arjs="sourceType: webcam;">
+        <!-- AR Marker -->
+        <a-marker preset="hiro">
+            <!-- Dynamic Budget Data -->
+            <a-entity id="incomeText" position="0 0.5 0" text="value: Income; color: green;"></a-entity>
+            <a-entity id="expensesText" position="0 0.3 0" text="value: Expenses; color: red;"></a-entity>
+            <a-entity id="breakdownText" position="0 0.1 0" text="value: Breakdown; color: black;"></a-entity>
+        </a-marker>
+
+        <!-- Camera -->
+        <a-entity camera></a-entity>
+    </a-scene>
+
+    <script>
+        // Retrieve budget data from URL parameters
+        function getQueryParams() {
+            const params = new URLSearchParams(window.location.search);
+            return {
+                income: params.get("income") || "N/A",
+                expenses: params.get("expenses") || "N/A",
+                groceries: params.get("groceries") || "N/A",
+                rent: params.get("rent") || "N/A"
+            };
+        }
+
+        // Set AR text elements with data from URL parameters
+        const params = getQueryParams();
+        document.getElementById("incomeText").setAttribute("text", `value: Total Income: $${params.income}; color: green;`);
+        document.getElementById("expensesText").setAttribute("text", `value: Total Expenses: $${params.expenses}; color: red;`);
+        document.getElementById("breakdownText").setAttribute("text", `value: Groceries: $${params.groceries}, Rent: $${params.rent}; color: black;`);
+    </script>
+</body>
+</html>
